@@ -640,55 +640,22 @@
       </h2>
     </div>
 
-    <!-- Editorial note for Jeremy / the team -->
-    <div class="reveal mb-6 rounded-lg border border-dashed border-accent/40 bg-accent/[0.04] px-4 py-3 font-mono text-[0.8rem] text-accent">
-      // TODO: Add participant testimonials. Left intentionally blank; quote real graduates only, with permission.
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-4" aria-hidden="true">
-      <div class="rounded-xl border border-dashed hairline bg-transparent p-6 min-h-[190px] flex flex-col">
-        <div class="flex-1 space-y-2.5">
-          <div class="h-2.5 rounded bg-white/[0.06] w-[92%]"></div>
-          <div class="h-2.5 rounded bg-white/[0.06] w-[86%]"></div>
-          <div class="h-2.5 rounded bg-white/[0.06] w-[64%]"></div>
-        </div>
-        <div class="mt-6 flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-white/[0.06]"></div>
-          <div class="space-y-1.5">
-            <div class="h-2 w-24 rounded bg-white/[0.06]"></div>
-            <div class="h-2 w-16 rounded bg-white/[0.04]"></div>
-          </div>
-        </div>
-      </div>
-      <div class="rounded-xl border border-dashed hairline bg-transparent p-6 min-h-[190px] flex flex-col">
-        <div class="flex-1 space-y-2.5">
-          <div class="h-2.5 rounded bg-white/[0.06] w-[88%]"></div>
-          <div class="h-2.5 rounded bg-white/[0.06] w-[94%]"></div>
-          <div class="h-2.5 rounded bg-white/[0.06] w-[52%]"></div>
-        </div>
-        <div class="mt-6 flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-white/[0.06]"></div>
-          <div class="space-y-1.5">
-            <div class="h-2 w-20 rounded bg-white/[0.06]"></div>
-            <div class="h-2 w-24 rounded bg-white/[0.04]"></div>
-          </div>
-        </div>
-      </div>
-      <div class="rounded-xl border border-dashed hairline bg-transparent p-6 min-h-[190px] flex flex-col">
-        <div class="flex-1 space-y-2.5">
-          <div class="h-2.5 rounded bg-white/[0.06] w-[80%]"></div>
-          <div class="h-2.5 rounded bg-white/[0.06] w-[90%]"></div>
-          <div class="h-2.5 rounded bg-white/[0.06] w-[70%]"></div>
-        </div>
-        <div class="mt-6 flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-white/[0.06]"></div>
-          <div class="space-y-1.5">
-            <div class="h-2 w-24 rounded bg-white/[0.06]"></div>
-            <div class="h-2 w-14 rounded bg-white/[0.04]"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <figure class="reveal max-w-3xl rounded-2xl border hairline bg-panel/60 p-7 md:p-9">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" class="text-accent/70 mb-5" aria-hidden="true"><path d="M9.5 6C6.5 7.5 5 10 5 13v5h5v-6H7.8c.2-1.8 1-3 2.7-3.8L9.5 6zm9 0c-3 1.5-4.5 4-4.5 7v5h5v-6h-2.2c.2-1.8 1-3 2.7-3.8L18.5 6z"/></svg>
+      <blockquote class="text-lg md:text-xl leading-relaxed text-ink">
+        I used the 100-Hour Workweek for two purposes. Firstly, for a focused push on work that usually gets fragmented, and secondly, to train my ability to carry out deep work for long periods of time. During the week, I made faster progress than ever before training ML models to predict oncology trajectories. On the weekend, I switched focus to actually complete an essay that I'd been chipping away at for months. It proved to me the bottleneck was attention more than anything else.
+      </blockquote>
+      <figcaption class="mt-7 flex items-center gap-3.5">
+        <span class="relative w-12 h-12 rounded-full overflow-hidden bg-white/[0.06] shrink-0" aria-hidden="true">
+          <span class="absolute inset-0 grid place-items-center font-display text-sm font-semibold text-muted">WS</span>
+          <img src="wian-stipp.jpg" alt="" width="96" height="96" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'" />
+        </span>
+        <span>
+          <span class="block font-display font-semibold text-ink">Wian Stipp</span>
+          <span class="block font-mono text-[0.72rem] text-faint">100-Hour Workweek graduate · ML researcher</span>
+        </span>
+      </figcaption>
+    </figure>
   </div>
 </section>
 
@@ -932,7 +899,7 @@
     function next() { go(idx + 1); }
     function prev() { go(idx - 1); }
     function stop() { if (timer) { clearInterval(timer); timer = null; } }
-    function start() { if (!reduce && !timer) { timer = setInterval(next, 5500); } }
+    function start() { if (!reduce && !timer) { timer = setInterval(next, 1500); } }
     function restart() { stop(); start(); }
 
     document.getElementById('carousel-next').addEventListener('click', function () { next(); restart(); });
