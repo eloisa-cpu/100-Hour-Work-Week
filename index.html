@@ -48,7 +48,8 @@
 
 <style>
   :root { color-scheme: dark; }
-  html, body { background: #0B0B0C; }
+  html { background: #0B0B0C; }
+  body { background: transparent; }
   body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 
   ::selection { background: rgba(245,178,61,0.28); color: #fff; }
@@ -119,6 +120,12 @@
   .carousel-dot { width: 7px; height: 7px; border-radius: 9999px; background: rgba(255,255,255,.28); transition: background .2s, width .2s; }
   .carousel-dot[aria-selected="true"] { background: #F5B23D; width: 20px; }
 
+  /* Scroll-scrubbed background video */
+  #scroll-video-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; background: #0B0B0C; }
+  #scroll-video-bg video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.3; }
+  #scroll-video-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(11,11,12,0.58), rgba(11,11,12,0.58)), radial-gradient(140% 140% at 50% 30%, transparent 40%, rgba(11,11,12,0.6) 100%); }
+  @media (max-width: 640px) { #scroll-video-bg video { opacity: 0.22; } }
+
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity:1 !important; transform:none !important; transition:none !important; }
     .btn, .ledger-cell { transition: none !important; }
@@ -129,7 +136,14 @@
 </style>
 </head>
 
-<body class="bg-bg text-ink font-sans antialiased selection:text-white">
+<body class="text-ink font-sans antialiased selection:text-white">
+
+<!-- Scroll-scrubbed background video: playback position tracks scroll progress -->
+<div id="scroll-video-bg" aria-hidden="true">
+  <video id="scrollVideo" muted playsinline preload="auto" tabindex="-1" disablepictureinpicture>
+    <source src="100hrworkweek-bg.mp4" type="video/mp4" />
+  </video>
+</div>
 
 <!-- ============ NAV ============ -->
 <header id="nav" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
@@ -394,12 +408,20 @@
 <section id="idea" class="mx-auto max-w-site px-6 py-24 md:py-36">
   <div class="grid lg:grid-cols-12 gap-10 lg:gap-16">
     <div class="lg:col-span-4">
-      <div class="lg:sticky lg:top-28">
+      <div>
         <p class="eyebrow text-accent reveal">The idea</p>
         <h2 class="reveal mt-4 font-display font-semibold text-[clamp(1.9rem,3.4vw,2.8rem)] leading-[1.08] tracking-[-0.02em]">
           It's a structure,<br />not a course.
         </h2>
       </div>
+
+      <figure class="reveal mt-8 lg:mt-10 max-w-xs">
+        <div class="rounded-2xl overflow-hidden border border-[#d2632b]/40 ring-1 ring-[#d2632b]/15 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.75)]">
+          <img src="ikigai.png" alt="The ikigai diagram: the overlap of what you love, what you are good at, what the world needs, and what you can be paid for"
+               width="713" height="640" loading="lazy" class="block w-full h-auto" />
+        </div>
+        <figcaption class="mt-3 font-mono text-[0.7rem] text-faint leading-relaxed"><span style="color:#d2632b">Ikigai</span> &mdash; where what you love, do well, the world needs, and pays for meet. A good week points here.</figcaption>
+      </figure>
     </div>
     <div class="lg:col-span-8 space-y-7 text-[1.075rem] leading-relaxed text-muted max-w-2xl">
       <p class="reveal">
@@ -423,7 +445,7 @@
 </section>
 
 <!-- ============ HOW IT WORKS ============ -->
-<section id="how" class="border-y hairline bg-panel/30">
+<section id="how" class="border-y hairline bg-panel/10">
   <div class="mx-auto max-w-site px-6 py-24 md:py-36">
     <div class="max-w-2xl mb-16 md:mb-20">
       <p class="eyebrow text-accent reveal">How it works</p>
@@ -514,59 +536,129 @@
   </div>
 
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <!-- card -->
-    <article class="reveal rounded-xl border hairline bg-panel/60 p-6 hover:border-accent/30 transition-colors">
-      <div class="w-9 h-9 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-5" aria-hidden="true">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="4" width="15" height="16" rx="2"/><path d="M17 9l5-3v12l-5-3"/></svg>
+
+    <!-- Livestreaming -->
+    <article class="reveal rounded-xl border hairline bg-panel/60 p-5 hover:border-accent/30 transition-colors">
+      <div class="relative h-32 rounded-lg overflow-hidden border hairline bg-black mb-5" aria-hidden="true">
+        <div class="absolute inset-0 bg-gradient-to-br from-accent/12 to-transparent"></div>
+        <div class="absolute top-2.5 left-2.5 flex items-center gap-1.5 rounded bg-black/60 border border-white/10 px-2 py-0.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+          <span class="font-mono text-[0.55rem] tracking-[0.15em] text-white">LIVE</span>
+        </div>
+        <span class="absolute top-2.5 right-2.5 font-mono text-[0.55rem] text-white/70">14:32:07</span>
+        <div class="absolute inset-0 grid place-items-center">
+          <span class="w-11 h-11 rounded-full bg-accent grid place-items-center shadow-[0_8px_24px_-6px_rgba(245,178,61,0.6)]">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#0B0B0C"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+        </div>
+        <div class="absolute bottom-2.5 inset-x-2.5">
+          <div class="h-1 rounded-full bg-white/15"><div class="h-full w-2/3 rounded-full bg-accent"></div></div>
+        </div>
       </div>
       <h3 class="font-display text-lg font-semibold tracking-tight">Livestreaming</h3>
       <p class="mt-2 text-sm leading-relaxed text-muted">The strongest proof there is: broadcast the work as it happens.</p>
     </article>
 
-    <article class="reveal rounded-xl border hairline bg-panel/60 p-6 hover:border-accent/30 transition-colors">
-      <div class="w-9 h-9 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-5" aria-hidden="true">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M3 13l5-4 4 3 3-2 6 4"/><circle cx="8" cy="8" r="1.4"/></svg>
+    <!-- Screenshots & artifacts -->
+    <article class="reveal rounded-xl border hairline bg-panel/60 p-5 hover:border-accent/30 transition-colors">
+      <div class="relative h-32 rounded-lg overflow-hidden border hairline bg-panel2 mb-5" aria-hidden="true">
+        <div class="flex items-center gap-1.5 px-3 h-6 border-b hairline bg-black/30">
+          <span class="w-2 h-2 rounded-full bg-white/20"></span>
+          <span class="w-2 h-2 rounded-full bg-white/20"></span>
+          <span class="w-2 h-2 rounded-full bg-white/20"></span>
+          <span class="ml-2 font-mono text-[0.55rem] text-faint">model.py</span>
+        </div>
+        <div class="p-3 space-y-1.5">
+          <div class="flex gap-2 items-center"><span class="w-3 h-1.5 rounded bg-accent/70"></span><span class="w-16 h-1.5 rounded bg-white/15"></span></div>
+          <div class="flex gap-2 items-center"><span class="w-3 h-1.5 rounded bg-white/10"></span><span class="w-24 h-1.5 rounded bg-white/15"></span><span class="w-8 h-1.5 rounded bg-accent/40"></span></div>
+          <div class="flex gap-2 items-center pl-5"><span class="w-20 h-1.5 rounded bg-white/15"></span></div>
+          <div class="flex gap-2 items-center pl-5"><span class="w-10 h-1.5 rounded bg-accent/40"></span><span class="w-12 h-1.5 rounded bg-white/15"></span></div>
+        </div>
+        <span class="absolute bottom-2 right-2.5 font-mono text-[0.55rem] text-accent">+142 −18</span>
       </div>
       <h3 class="font-display text-lg font-semibold tracking-tight">Screenshots &amp; artifacts</h3>
       <p class="mt-2 text-sm leading-relaxed text-muted">The commits, drafts, designs, and outputs the hours actually produced.</p>
     </article>
 
-    <article class="reveal rounded-xl border hairline bg-panel/60 p-6 hover:border-accent/30 transition-colors">
-      <div class="w-9 h-9 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-5" aria-hidden="true">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    <!-- RescueTime -->
+    <article class="reveal rounded-xl border hairline bg-panel/60 p-5 hover:border-accent/30 transition-colors">
+      <div class="relative h-32 rounded-lg overflow-hidden border hairline bg-panel2 p-3 flex flex-col justify-end" aria-hidden="true">
+        <span class="absolute top-2.5 left-3 font-mono text-[0.55rem] text-faint">hours / day</span>
+        <div class="flex items-end justify-between gap-1.5 h-14">
+          <div class="flex-1 rounded-t-sm bg-accent" style="height:72%"></div>
+          <div class="flex-1 rounded-t-sm bg-accent" style="height:86%"></div>
+          <div class="flex-1 rounded-t-sm bg-accent2" style="height:60%"></div>
+          <div class="flex-1 rounded-t-sm bg-accent" style="height:94%"></div>
+          <div class="flex-1 rounded-t-sm bg-accent" style="height:78%"></div>
+          <div class="flex-1 rounded-t-sm bg-accent2" style="height:88%"></div>
+          <div class="flex-1 rounded-t-sm bg-accent" style="height:100%"></div>
+        </div>
+        <div class="mt-1.5 flex justify-between font-mono text-[0.5rem] text-faint"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
       </div>
       <h3 class="font-display text-lg font-semibold tracking-tight">RescueTime</h3>
       <p class="mt-2 text-sm leading-relaxed text-muted">An automatic dump of what your machine was doing, hour by hour.</p>
     </article>
 
-    <article class="reveal rounded-xl border hairline bg-panel/60 p-6 hover:border-accent/30 transition-colors">
-      <div class="w-9 h-9 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-5" aria-hidden="true">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><rect x="7" y="13" width="3" height="3" rx="0.5" fill="currentColor" stroke="none"/></svg>
+    <!-- Calendar -->
+    <article class="reveal rounded-xl border hairline bg-panel/60 p-5 hover:border-accent/30 transition-colors">
+      <div class="relative h-32 rounded-lg overflow-hidden border hairline bg-panel2 p-2.5" aria-hidden="true">
+        <div class="grid grid-cols-7 gap-1 h-full">
+          <div class="flex flex-col gap-1"><span class="flex-1 rounded-[3px] bg-white/[0.06]"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-white/[0.06]"></span></div>
+          <div class="flex flex-col gap-1"><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-white/[0.06]"></span><span class="flex-1 rounded-[3px] bg-white/[0.06]"></span></div>
+          <div class="flex flex-col gap-1"><span class="flex-1 rounded-[3px] bg-white/[0.06]"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span></div>
+          <div class="flex flex-col gap-1"><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-white/[0.06]"></span></div>
+          <div class="flex flex-col gap-1"><span class="flex-1 rounded-[3px] bg-white/[0.06]"></span><span class="flex-1 rounded-[3px] bg-white/[0.06]"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span></div>
+          <div class="flex flex-col gap-1"><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-white/[0.06]"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span></div>
+          <div class="flex flex-col gap-1"><span class="flex-1 rounded-[3px] bg-white/[0.06]"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-accent/70"></span><span class="flex-1 rounded-[3px] bg-white/[0.06]"></span></div>
+        </div>
       </div>
       <h3 class="font-display text-lg font-semibold tracking-tight">Calendar</h3>
       <p class="mt-2 text-sm leading-relaxed text-muted">Your day, time-blocked and shared, pixelated if you'd rather not show the detail.</p>
     </article>
 
-    <article class="reveal rounded-xl border hairline bg-panel/60 p-6 hover:border-accent/30 transition-colors">
-      <div class="w-9 h-9 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-5" aria-hidden="true">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
+    <!-- Peer verification -->
+    <article class="reveal rounded-xl border hairline bg-panel/60 p-5 hover:border-accent/30 transition-colors">
+      <div class="relative h-32 rounded-lg overflow-hidden border hairline bg-panel2 grid place-items-center" aria-hidden="true">
+        <div class="flex -space-x-3">
+          <span class="w-9 h-9 rounded-full bg-white/[0.10] border-2 border-panel2"></span>
+          <span class="w-9 h-9 rounded-full bg-white/[0.16] border-2 border-panel2"></span>
+          <span class="w-9 h-9 rounded-full bg-accent/30 border-2 border-panel2"></span>
+          <span class="w-9 h-9 rounded-full bg-white/[0.10] border-2 border-panel2 grid place-items-center font-mono text-[0.55rem] text-muted">+9</span>
+        </div>
+        <div class="absolute bottom-3 right-3 flex items-center gap-1 rounded-full bg-accent/15 border border-accent/30 px-2 py-0.5">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#F5B23D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          <span class="font-mono text-[0.55rem] text-accent">verified</span>
+        </div>
       </div>
       <h3 class="font-display text-lg font-semibold tracking-tight">Peer verification</h3>
       <p class="mt-2 text-sm leading-relaxed text-muted">It all lands in a shared channel with one goal: leave no doubt the hours were real.</p>
     </article>
 
-    <article class="reveal rounded-xl border border-accent/20 bg-gradient-to-b from-accent/[0.07] to-transparent p-6 flex flex-col justify-between">
-      <div>
-        <div class="eyebrow text-accent mb-3">Your standard</div>
-        <p class="font-display text-lg leading-snug tracking-tight text-ink">You decide the number.<br />The group decides it's believable.</p>
+    <!-- Your standard (accent) -->
+    <article class="reveal rounded-xl border border-accent/20 bg-gradient-to-b from-accent/[0.08] to-transparent p-5 flex flex-col">
+      <div class="mb-5" aria-hidden="true">
+        <div class="flex items-baseline justify-between mb-2 font-mono text-[0.6rem] text-faint">
+          <span>70</span>
+          <span class="font-display text-2xl font-semibold text-accent leading-none">~100</span>
+          <span>120</span>
+        </div>
+        <div class="relative h-1.5 rounded-full bg-white/10">
+          <div class="absolute inset-y-0 left-0 w-3/5 rounded-full bg-gradient-to-r from-accent2 to-accent"></div>
+          <div class="absolute top-1/2 left-[60%] -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-accent border-2 border-bg shadow-[0_0_0_3px_rgba(245,178,61,0.2)]"></div>
+        </div>
+        <div class="mt-2 font-mono text-[0.55rem] text-faint">hours &mdash; your call</div>
       </div>
-      <p class="mt-4 text-sm text-muted">70–120 hours. You just have to hit the goal you set.</p>
+      <div class="mt-auto">
+        <div class="eyebrow text-accent mb-2">Your standard</div>
+        <p class="font-display text-lg leading-snug tracking-tight text-ink">You decide the number.<br />The group decides it's believable.</p>
+        <p class="mt-3 text-sm text-muted">70&ndash;120 hours. You just have to hit the goal you set.</p>
+      </div>
     </article>
   </div>
 </section>
 
 <!-- ============ WHO IT'S FOR ============ -->
-<section class="border-y hairline bg-panel/30">
+<section class="border-y hairline bg-panel/10">
   <div class="mx-auto max-w-site px-6 py-24 md:py-32">
     <div class="grid lg:grid-cols-12 gap-10 items-start">
       <div class="lg:col-span-5">
@@ -580,13 +672,43 @@
         </p>
       </div>
       <div class="lg:col-span-7 lg:pt-4">
-        <div class="reveal flex flex-wrap gap-2.5">
-          <span class="tag rounded-full px-4 py-2 text-sm text-ink transition-colors">Founders</span>
-          <span class="tag rounded-full px-4 py-2 text-sm text-ink transition-colors">Engineers</span>
-          <span class="tag rounded-full px-4 py-2 text-sm text-ink transition-colors">Researchers</span>
-          <span class="tag rounded-full px-4 py-2 text-sm text-ink transition-colors">Ambitious students</span>
-          <span class="tag rounded-full px-4 py-2 text-sm text-ink transition-colors">Startup operators</span>
-          <span class="tag rounded-full px-4 py-2 text-sm text-ink transition-colors">AI builders</span>
+        <div class="reveal grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div class="group flex items-center gap-3 rounded-xl border hairline bg-panel/40 px-4 py-3.5 hover:border-accent/40 hover:bg-panel2 transition-colors">
+            <span class="w-8 h-8 rounded-lg bg-accent/10 text-accent grid place-items-center shrink-0" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2.4 1.2 3.8 3.7 3.8 6.8 0 2.2-1 4.2-3.8 6.5-2.8-2.3-3.8-4.3-3.8-6.5C8.2 6.7 9.6 4.2 12 3z"/><circle cx="12" cy="9" r="1.2"/><path d="M9 15l-2.2 4M15 15l2.2 4"/></svg>
+            </span>
+            <span class="text-sm font-medium text-ink">Founders</span>
+          </div>
+          <div class="group flex items-center gap-3 rounded-xl border hairline bg-panel/40 px-4 py-3.5 hover:border-accent/40 hover:bg-panel2 transition-colors">
+            <span class="w-8 h-8 rounded-lg bg-accent/10 text-accent grid place-items-center shrink-0" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg>
+            </span>
+            <span class="text-sm font-medium text-ink">Engineers</span>
+          </div>
+          <div class="group flex items-center gap-3 rounded-xl border hairline bg-panel/40 px-4 py-3.5 hover:border-accent/40 hover:bg-panel2 transition-colors">
+            <span class="w-8 h-8 rounded-lg bg-accent/10 text-accent grid place-items-center shrink-0" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-4.2 8.4A2 2 0 0 0 7.6 20h8.8a2 2 0 0 0 1.8-2.6L14 9V3"/><path d="M8 15h8"/></svg>
+            </span>
+            <span class="text-sm font-medium text-ink">Researchers</span>
+          </div>
+          <div class="group flex items-center gap-3 rounded-xl border hairline bg-panel/40 px-4 py-3.5 hover:border-accent/40 hover:bg-panel2 transition-colors">
+            <span class="w-8 h-8 rounded-lg bg-accent/10 text-accent grid place-items-center shrink-0" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5l10 4-10 4L2 9l10-4z"/><path d="M6 11v4c0 1.2 2.7 2.5 6 2.5s6-1.3 6-2.5v-4"/><path d="M22 9v5"/></svg>
+            </span>
+            <span class="text-sm font-medium text-ink">Ambitious students</span>
+          </div>
+          <div class="group flex items-center gap-3 rounded-xl border hairline bg-panel/40 px-4 py-3.5 hover:border-accent/40 hover:bg-panel2 transition-colors">
+            <span class="w-8 h-8 rounded-lg bg-accent/10 text-accent grid place-items-center shrink-0" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>
+            </span>
+            <span class="text-sm font-medium text-ink">Startup operators</span>
+          </div>
+          <div class="group flex items-center gap-3 rounded-xl border hairline bg-panel/40 px-4 py-3.5 hover:border-accent/40 hover:bg-panel2 transition-colors">
+            <span class="w-8 h-8 rounded-lg bg-accent/10 text-accent grid place-items-center shrink-0" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 4v3M14 4v3M10 17v3M14 17v3M4 10h3M4 14h3M17 10h3M17 14h3"/></svg>
+            </span>
+            <span class="text-sm font-medium text-ink">AI builders</span>
+          </div>
         </div>
       </div>
     </div>
@@ -605,45 +727,21 @@
     </p>
   </div>
 
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-    <!-- outcome tile -->
-    <div class="reveal group rounded-xl border hairline bg-panel/50 p-5 hover:bg-panel2 transition-colors">
-      <div class="font-mono text-xs text-faint">01</div>
-      <div class="mt-3 font-display text-base md:text-lg font-medium tracking-tight">A startup</div>
-    </div>
-    <div class="reveal group rounded-xl border hairline bg-panel/50 p-5 hover:bg-panel2 transition-colors">
-      <div class="font-mono text-xs text-faint">02</div>
-      <div class="mt-3 font-display text-base md:text-lg font-medium tracking-tight">A research paper</div>
-    </div>
-    <div class="reveal group rounded-xl border hairline bg-panel/50 p-5 hover:bg-panel2 transition-colors">
-      <div class="font-mono text-xs text-faint">03</div>
-      <div class="mt-3 font-display text-base md:text-lg font-medium tracking-tight">An AI project</div>
-    </div>
-    <div class="reveal group rounded-xl border hairline bg-panel/50 p-5 hover:bg-panel2 transition-colors">
-      <div class="font-mono text-xs text-faint">04</div>
-      <div class="mt-3 font-display text-base md:text-lg font-medium tracking-tight">An open-source release</div>
-    </div>
-    <div class="reveal group rounded-xl border hairline bg-panel/50 p-5 hover:bg-panel2 transition-colors">
-      <div class="font-mono text-xs text-faint">05</div>
-      <div class="mt-3 font-display text-base md:text-lg font-medium tracking-tight">A company</div>
-    </div>
-    <div class="reveal group rounded-xl border hairline bg-panel/50 p-5 hover:bg-panel2 transition-colors">
-      <div class="font-mono text-xs text-faint">06</div>
-      <div class="mt-3 font-display text-base md:text-lg font-medium tracking-tight">A thesis</div>
-    </div>
-    <div class="reveal group rounded-xl border hairline bg-panel/50 p-5 hover:bg-panel2 transition-colors">
-      <div class="font-mono text-xs text-faint">07</div>
-      <div class="mt-3 font-display text-base md:text-lg font-medium tracking-tight">A hardware prototype</div>
-    </div>
-    <div class="reveal group rounded-xl border hairline bg-panel/50 p-5 hover:bg-panel2 transition-colors">
-      <div class="font-mono text-xs text-faint">08</div>
-      <div class="mt-3 font-display text-base md:text-lg font-medium tracking-tight">A book</div>
-    </div>
+  <!-- Word-cloud: outcomes at varying weight, size, and color -->
+  <div class="reveal max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-x-7 gap-y-2.5 text-center leading-none">
+    <span class="font-display font-semibold tracking-tight text-accent text-[clamp(2rem,5vw,3.6rem)] hover:opacity-80 transition-opacity cursor-default">A startup</span>
+    <span class="font-display font-medium tracking-tight text-ink text-[clamp(1.25rem,2.9vw,2rem)] hover:text-accent transition-colors cursor-default">A research paper</span>
+    <span class="font-display font-semibold tracking-tight text-ink text-[clamp(2.3rem,5.6vw,4rem)] hover:text-accent transition-colors cursor-default">An AI project</span>
+    <span class="font-display font-normal tracking-tight text-muted text-[clamp(1.05rem,2.3vw,1.5rem)] hover:text-accent transition-colors cursor-default">An open-source release</span>
+    <span class="font-display font-semibold tracking-tight text-accent2 text-[clamp(1.7rem,4.4vw,2.9rem)] hover:opacity-80 transition-opacity cursor-default">A company</span>
+    <span class="font-display font-medium tracking-tight text-muted text-[clamp(1.2rem,2.7vw,1.85rem)] hover:text-accent transition-colors cursor-default">A thesis</span>
+    <span class="font-display font-normal tracking-tight text-ink text-[clamp(1.3rem,3vw,2.05rem)] hover:text-accent transition-colors cursor-default">A hardware prototype</span>
+    <span class="font-display font-semibold tracking-tight text-accent text-[clamp(1.9rem,4.7vw,3.2rem)] hover:opacity-80 transition-opacity cursor-default">A book</span>
   </div>
 </section>
 
 <!-- ============ TESTIMONIALS (placeholder, no invented quotes) ============ -->
-<section class="border-y hairline bg-panel/30">
+<section class="border-y hairline bg-panel/10">
   <div class="mx-auto max-w-site px-6 py-24 md:py-32">
     <div class="max-w-2xl mb-10">
       <p class="eyebrow text-accent reveal">From participants</p>
@@ -934,6 +1032,43 @@
 
     go(0);
     start();
+  }
+
+  /* Scroll-scrubbed background video: playback position eases toward scroll progress.
+     NOTE: smoothness is ultimately capped by the source video's resolution + keyframe
+     density. A 1080p/720p re-encode with a short keyframe interval scrubs perfectly. */
+  var sv = document.getElementById('scrollVideo');
+  if (sv) {
+    if (reduce) {
+      var showFirst = function () { try { sv.currentTime = 0.05; } catch (e) {} };
+      sv.addEventListener('loadeddata', showFirst);
+      sv.load();
+    } else {
+      var targetT = 0, curT = 0, running = false;
+      function computeTarget() {
+        var dur = sv.duration;
+        if (!dur || !isFinite(dur) || dur <= 0) return;
+        var st = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var max = document.documentElement.scrollHeight - window.innerHeight;
+        var p = max > 0 ? Math.min(1, Math.max(0, st / max)) : 0;
+        targetT = p * (dur - 0.05);
+        if (!running) { running = true; requestAnimationFrame(loop); }
+      }
+      function loop() {
+        curT += (targetT - curT) * 0.16;
+        if (Math.abs(targetT - curT) < 0.01) curT = targetT;
+        if (!sv.seeking && Math.abs(sv.currentTime - curT) > 0.012) {
+          try { sv.currentTime = curT; } catch (e) {}
+        }
+        if (Math.abs(targetT - curT) > 0.004) { requestAnimationFrame(loop); } else { running = false; }
+      }
+      sv.addEventListener('loadedmetadata', function () { curT = sv.currentTime || 0; computeTarget(); });
+      window.addEventListener('scroll', computeTarget, { passive: true });
+      window.addEventListener('resize', computeTarget, { passive: true });
+      var kick = function () { sv.play().then(function () { sv.pause(); computeTarget(); }).catch(function () { computeTarget(); }); };
+      if (sv.readyState >= 1) { kick(); } else { sv.addEventListener('loadeddata', kick, { once: true }); }
+      sv.load();
+    }
   }
 })();
 </script>
