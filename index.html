@@ -855,42 +855,99 @@
 
 <!-- ============ CELEBRATE THE GRADUATES ============ -->
 <style>
-  .confetti{position:absolute;left:0;right:0;top:0;height:360px;pointer-events:none;overflow:hidden}
-  .confetti i{position:absolute;top:-16px;width:7px;height:13px;border-radius:2px;opacity:0;animation:confetti-fall linear infinite}
+  /* celebrate: perspective floor of yellow squares, receding to a horizon */
+  .cel-floor{position:absolute;left:50%;top:60px;width:340%;height:720px;pointer-events:none;z-index:0;
+    transform:translateX(-50%) perspective(780px) rotateX(60deg);transform-origin:bottom center;
+    -webkit-mask:linear-gradient(to top,#000 2%,rgba(0,0,0,.5) 52%,transparent 88%);
+            mask:linear-gradient(to top,#000 2%,rgba(0,0,0,.5) 52%,transparent 88%)}
+  .cel-floor svg{display:block;width:100%;height:100%}
+  /* celebrate: confetti */
+  .confetti{position:absolute;left:0;right:0;top:0;height:620px;pointer-events:none;overflow:hidden;z-index:1}
+  .confetti i{position:absolute;top:-20px;width:8px;height:14px;opacity:0;animation:confetti-fall linear infinite}
+  .confetti i.c{border-radius:50%;width:9px;height:9px}
+  .confetti i.r{border-radius:2px}
   @keyframes confetti-fall{
-    0%{transform:translateY(-16px) rotate(0deg);opacity:0}
-    12%{opacity:.95}
-    100%{transform:translateY(360px) rotate(300deg);opacity:0}
+    0%{transform:translateY(-20px) rotate(0deg);opacity:0}
+    8%{opacity:1}
+    90%{opacity:1}
+    100%{transform:translateY(620px) rotate(460deg);opacity:0}
   }
-  @media (prefers-reduced-motion: reduce){ .confetti i{animation:none;opacity:.6;transform:none} }
+  /* celebrate: twinkling sparkles */
+  .cel-spark{position:absolute;pointer-events:none;color:#F5B23D;opacity:0;animation:cel-twinkle 3.4s ease-in-out infinite;z-index:1}
+  @keyframes cel-twinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:.95;transform:scale(1)}}
+  /* celebrate: gradient gold title */
+  .cel-grad{background:linear-gradient(180deg,#ffdc92,#F5B23D 52%,#E08A2B);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  @media (prefers-reduced-motion: reduce){
+    .confetti i{animation:none;opacity:.6;transform:none}
+    .cel-spark{animation:none;opacity:.55}
+  }
 </style>
 <section id="success" class="relative overflow-hidden border-y hairline" style="background:
-    radial-gradient(70% 55% at 50% -5%, rgba(245,178,61,0.13), transparent 68%),
-    radial-gradient(45% 45% at 88% 108%, rgba(80,196,138,0.09), transparent 70%),
-    radial-gradient(42% 42% at 6% 95%, rgba(224,138,43,0.08), transparent 72%),
-    linear-gradient(180deg, #121214 0%, #0d0d0f 55%, #0b0b0c 100%);">
+    radial-gradient(78% 56% at 50% -10%, rgba(245,178,61,0.18), transparent 64%),
+    radial-gradient(48% 48% at 88% 108%, rgba(80,196,138,0.11), transparent 70%),
+    radial-gradient(46% 46% at 5% 100%, rgba(224,138,43,0.11), transparent 72%),
+    linear-gradient(180deg, #151517 0%, #0e0e10 52%, #0b0b0c 100%);">
+  <div class="cel-floor" aria-hidden="true">
+    <svg viewBox="0 0 1200 760" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="celSquares" width="68" height="68" patternUnits="userSpaceOnUse">
+          <rect x="21" y="21" width="26" height="26" rx="4" fill="#F5B23D" fill-opacity="0.5"/>
+        </pattern>
+        <pattern id="celSquares2" width="68" height="68" patternUnits="userSpaceOnUse" x="34" y="34">
+          <rect x="24" y="24" width="20" height="20" rx="3" fill="#E08A2B" fill-opacity="0.28"/>
+        </pattern>
+      </defs>
+      <rect width="1200" height="760" fill="url(#celSquares)"/>
+      <rect width="1200" height="760" fill="url(#celSquares2)"/>
+    </svg>
+  </div>
   <!-- soft spotlight behind the header -->
-  <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 w-[min(760px,92%)] h-72 rounded-full blur-3xl" style="background:radial-gradient(closest-side, rgba(245,178,61,0.10), transparent);"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 w-[min(840px,94%)] h-80 rounded-full blur-3xl" style="background:radial-gradient(closest-side, rgba(245,178,61,0.18), transparent);z-index:0;"></div>
+
   <div class="confetti" aria-hidden="true">
-    <i style="left:6%;background:#F5B23D;animation-duration:4.4s;animation-delay:.0s"></i>
-    <i style="left:14%;background:#6fd3a1;animation-duration:5.2s;animation-delay:.9s"></i>
-    <i style="left:22%;background:#E08A2B;animation-duration:3.8s;animation-delay:.4s"></i>
-    <i style="left:31%;background:#F4F3F1;animation-duration:5.6s;animation-delay:1.4s"></i>
-    <i style="left:39%;background:#F5B23D;animation-duration:4.0s;animation-delay:.2s"></i>
-    <i style="left:47%;background:#6fd3a1;animation-duration:5.0s;animation-delay:1.1s"></i>
-    <i style="left:55%;background:#E08A2B;animation-duration:4.6s;animation-delay:.6s"></i>
-    <i style="left:63%;background:#F4F3F1;animation-duration:3.9s;animation-delay:1.6s"></i>
-    <i style="left:71%;background:#F5B23D;animation-duration:5.4s;animation-delay:.3s"></i>
-    <i style="left:79%;background:#6fd3a1;animation-duration:4.2s;animation-delay:1.2s"></i>
-    <i style="left:87%;background:#E08A2B;animation-duration:5.1s;animation-delay:.7s"></i>
-    <i style="left:94%;background:#F4F3F1;animation-duration:4.3s;animation-delay:1.8s"></i>
+    <i class="r" style="left:4%;background:#F5B23D;animation-duration:4.4s;animation-delay:0s"></i>
+    <i class="c" style="left:9%;background:#6fd3a1;animation-duration:5.4s;animation-delay:.9s"></i>
+    <i class="r" style="left:14%;background:#E08A2B;animation-duration:3.8s;animation-delay:.4s"></i>
+    <i class="c" style="left:19%;background:#F4F3F1;animation-duration:5.8s;animation-delay:1.5s"></i>
+    <i class="r" style="left:24%;background:#F5B23D;animation-duration:4.1s;animation-delay:.2s"></i>
+    <i class="c" style="left:29%;background:#6fd3a1;animation-duration:5.0s;animation-delay:1.1s"></i>
+    <i class="r" style="left:34%;background:#E08A2B;animation-duration:4.7s;animation-delay:.6s"></i>
+    <i class="c" style="left:39%;background:#ffdc92;animation-duration:3.9s;animation-delay:1.7s"></i>
+    <i class="r" style="left:44%;background:#F5B23D;animation-duration:5.3s;animation-delay:.35s"></i>
+    <i class="c" style="left:49%;background:#6fd3a1;animation-duration:4.3s;animation-delay:1.25s"></i>
+    <i class="r" style="left:54%;background:#E08A2B;animation-duration:5.1s;animation-delay:.75s"></i>
+    <i class="c" style="left:59%;background:#F4F3F1;animation-duration:4.0s;animation-delay:1.9s"></i>
+    <i class="r" style="left:64%;background:#F5B23D;animation-duration:4.6s;animation-delay:.15s"></i>
+    <i class="c" style="left:69%;background:#6fd3a1;animation-duration:5.5s;animation-delay:1.35s"></i>
+    <i class="r" style="left:74%;background:#E08A2B;animation-duration:3.9s;animation-delay:.55s"></i>
+    <i class="c" style="left:79%;background:#ffdc92;animation-duration:5.0s;animation-delay:1.05s"></i>
+    <i class="r" style="left:84%;background:#F5B23D;animation-duration:4.4s;animation-delay:.45s"></i>
+    <i class="c" style="left:89%;background:#6fd3a1;animation-duration:5.6s;animation-delay:1.55s"></i>
+    <i class="r" style="left:94%;background:#E08A2B;animation-duration:4.2s;animation-delay:.85s"></i>
+    <i class="c" style="left:97%;background:#F4F3F1;animation-duration:5.2s;animation-delay:1.75s"></i>
   </div>
 
-  <div class="relative mx-auto max-w-site px-6 py-24 md:py-32">
+  <!-- twinkling sparkles -->
+  <svg class="cel-spark" style="left:15%;top:130px" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>
+  <svg class="cel-spark" style="right:17%;top:96px;animation-delay:1.1s" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>
+  <svg class="cel-spark" style="left:29%;top:64px;animation-delay:2s" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>
+  <svg class="cel-spark" style="right:29%;top:158px;animation-delay:1.6s" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>
+
+  <div class="relative mx-auto max-w-site px-6 py-24 md:py-32" style="z-index:2">
     <div class="text-center max-w-2xl mx-auto mb-14">
+      <!-- award medal -->
+      <div class="reveal flex justify-center mb-6">
+        <span class="relative inline-grid place-items-center w-16 h-16 rounded-full" style="background:radial-gradient(closest-side,rgba(245,178,61,.22),rgba(245,178,61,.03));box-shadow:0 0 46px rgba(245,178,61,.3);">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M8.4 13.4L6.3 21l5.7-2.7L17.7 21l-2.1-7.6" stroke="#E08A2B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="8.8" r="6.3" fill="#0e0e10" stroke="#F5B23D" stroke-width="1.6"/>
+            <path d="M12 5.4l1.17 2.37 2.61.38-1.89 1.84.45 2.6L12 11.36 9.66 12.6l.45-2.6L8.22 8.15l2.61-.38z" fill="#F5B23D"/>
+          </svg>
+        </span>
+      </div>
       <p class="eyebrow text-accent reveal">The cohort &middot; 100 hours cleared</p>
       <h2 class="reveal mt-4 font-display font-semibold text-[clamp(2rem,4vw,3rem)] leading-[1.04] tracking-[-0.02em]">
-        <span class="font-serif italic font-normal text-accent">Congratulations</span> to our graduates.
+        <span class="font-serif italic font-normal cel-grad">Congratulations</span> to our graduates.
       </h2>
       <p class="reveal mt-5 text-muted leading-relaxed">
         This one&rsquo;s for them. They called their shot, logged every hour, and cleared it, giving a
