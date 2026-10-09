@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>The 100-Hour Workweek: the most productive week of your life</title>
-<meta name="description" content="Commit to a 70–120 hour week, prove every hour, and ship the ambitious thing you keep putting off: a company, a paper, a product, a research result. Monthly cohorts." />
+<meta name="description" content="Commit to a 70–120 hour week, prove every hour, and ship the ambitious thing you keep putting off: a company, a paper, a product, a research result. Start any Monday." />
 
 <!-- Social preview -->
 <meta property="og:title" content="The 100-Hour Workweek" />
@@ -96,6 +96,23 @@
   .btn-primary:hover { transform: translateY(-1px); background:#fff; box-shadow: 0 10px 30px -12px rgba(245,178,61,.5); }
   .btn-ghost { background: transparent; color:#F4F3F1; padding:.8rem 1.05rem; border:1px solid rgba(255,255,255,0.14); }
   .btn-ghost:hover { border-color: rgba(255,255,255,0.32); transform: translateY(-1px); }
+  /* Shrink CTAs on mobile so the longer label fits cleanly */
+  @media (max-width: 640px) {
+    .btn-primary, .btn-ghost { padding: .66rem .9rem !important; font-size: .8rem !important; gap: .35rem !important; }
+  }
+
+  /* Page-transition overlay — makes nav shortcuts feel like loading a new page */
+  #page-transition { position: fixed; inset: 0; z-index: 70; background: #0B0B0C; display: grid; place-items: center; opacity: 0; visibility: hidden; transition: opacity .26s ease, visibility 0s linear .26s; }
+  #page-transition.active { opacity: 1; visibility: visible; transition: opacity .24s ease; }
+  #page-transition .pt-mark { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; opacity: 0; transform: translateY(8px) scale(.9); transition: opacity .24s ease .04s, transform .24s ease .04s; }
+  #page-transition.active .pt-mark { opacity: 1; transform: none; }
+  #page-transition .pt-mark span { width: 10px; height: 10px; border-radius: 2px; background: #F5B23D; }
+  #page-transition.active .pt-mark span { animation: pt-pulse .9s ease-in-out infinite; }
+  #page-transition .pt-mark span:nth-child(2){animation-delay:.08s}#page-transition .pt-mark span:nth-child(3){animation-delay:.16s}
+  #page-transition .pt-mark span:nth-child(4){animation-delay:.08s}#page-transition .pt-mark span:nth-child(5){animation-delay:.16s}#page-transition .pt-mark span:nth-child(6){animation-delay:.24s}
+  #page-transition .pt-mark span:nth-child(7){animation-delay:.16s}#page-transition .pt-mark span:nth-child(8){animation-delay:.24s}#page-transition .pt-mark span:nth-child(9){animation-delay:.32s}
+  @keyframes pt-pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+  @media (prefers-reduced-motion: reduce) { #page-transition { display: none !important; } }
 
   a.link-accent { color:#F5B23D; text-decoration: none; transition: color .15s; }
   a.link-accent:hover { color:#ffce7a; }
@@ -149,10 +166,19 @@
 
 <body class="text-ink font-sans antialiased selection:text-white">
 
+<!-- Page-transition overlay (nav shortcuts) -->
+<div id="page-transition" aria-hidden="true">
+  <span class="pt-mark">
+    <span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+  </span>
+</div>
+
 <!-- Scroll-scrubbed background video: playback position tracks scroll progress -->
 <div id="scroll-video-bg" aria-hidden="true">
   <video id="scrollVideo" muted playsinline preload="auto" tabindex="-1" disablepictureinpicture>
-    <source src="100hrworkweek-bg.mp4.mp4" type="video/mp4" />
+    <source src="100hrworkweek-bg.mp4" type="video/mp4" />
   </video>
 </div>
 
@@ -179,11 +205,12 @@
         <a href="#idea" class="hover:text-ink transition-colors">The idea</a>
         <a href="#how" class="hover:text-ink transition-colors">How it works</a>
         <a href="#proof" class="hover:text-ink transition-colors">Proof</a>
+        <a href="#success" class="hover:text-ink transition-colors">Success Stories</a>
         <a href="#faq" class="hover:text-ink transition-colors">FAQ</a>
       </nav>
 
       <div class="flex items-center gap-2">
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdsBmmD85bvWYn0EA1jmhW_C-CyKDhm_NIYRF1D-m_7yCF7yQ/viewform?usp=header" target="_blank" rel="noopener noreferrer" class="btn btn-primary hidden sm:inline-flex text-sm">Join the next cohort</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdsBmmD85bvWYn0EA1jmhW_C-CyKDhm_NIYRF1D-m_7yCF7yQ/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="btn btn-primary hidden sm:inline-flex text-sm">Start Your 100-Hour Workweek</a>
         <button id="menuBtn" class="md:hidden p-2 -mr-2 text-ink" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
@@ -196,8 +223,9 @@
       <a href="#idea" class="py-2.5 text-muted hover:text-ink">The idea</a>
       <a href="#how" class="py-2.5 text-muted hover:text-ink">How it works</a>
       <a href="#proof" class="py-2.5 text-muted hover:text-ink">Proof</a>
+      <a href="#success" class="py-2.5 text-muted hover:text-ink">Success Stories</a>
       <a href="#faq" class="py-2.5 text-muted hover:text-ink">FAQ</a>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdsBmmD85bvWYn0EA1jmhW_C-CyKDhm_NIYRF1D-m_7yCF7yQ/viewform?usp=header" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-3 justify-center">Join the next cohort</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdsBmmD85bvWYn0EA1jmhW_C-CyKDhm_NIYRF1D-m_7yCF7yQ/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-3 justify-center">Start Your 100-Hour Workweek</a>
     </nav>
   </div>
 </header>
@@ -328,7 +356,7 @@
       <div class="lg:col-span-7">
         <div class="reveal inline-flex items-center gap-2.5 rounded-full border hairline bg-white/[0.02] px-3.5 py-1.5 mb-7">
           <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
-          <span class="eyebrow text-muted">Next cohort · Oct 05–11, 2026</span>
+          <span class="eyebrow text-muted">Now enrolling · Start any Monday</span>
         </div>
 
         <h1 class="reveal font-display font-semibold text-ink leading-[1.02] tracking-[-0.02em] text-[clamp(2.6rem,6vw,4.9rem)]">
@@ -342,14 +370,14 @@
         </p>
 
         <div class="reveal mt-9 flex flex-wrap items-center gap-3">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdsBmmD85bvWYn0EA1jmhW_C-CyKDhm_NIYRF1D-m_7yCF7yQ/viewform?usp=header" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Join the next cohort
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdsBmmD85bvWYn0EA1jmhW_C-CyKDhm_NIYRF1D-m_7yCF7yQ/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Start Your 100-Hour Workweek
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
           <a href="https://jeremynixon.net/100-hr-workweek" target="_blank" rel="noopener" class="btn btn-ghost">Read the original post</a>
         </div>
 
         <p class="reveal mt-7 font-mono text-[0.78rem] text-faint tracking-tight">
-          Monthly cohorts &nbsp;·&nbsp; You commit to 70–120 hours &nbsp;·&nbsp; $100–200 for the week
+          Start any Monday &nbsp;·&nbsp; You commit to 70–120 hours &nbsp;·&nbsp; $100–200 for the week
         </p>
       </div>
 
@@ -408,8 +436,8 @@
         <dd class="font-display text-2xl md:text-[1.7rem] font-semibold tracking-tight">7 days</dd>
       </div>
       <div class="reveal p-6 md:p-8">
-        <dt class="eyebrow text-faint mb-2">Cohorts</dt>
-        <dd class="font-display text-2xl md:text-[1.7rem] font-semibold tracking-tight">Monthly</dd>
+        <dt class="eyebrow text-faint mb-2">Start date</dt>
+        <dd class="font-display text-2xl md:text-[1.7rem] font-semibold tracking-tight">Any Monday</dd>
       </div>
     </dl>
   </div>
@@ -476,7 +504,7 @@
         </div>
         <div class="pt-1.5 md:pt-3">
           <h3 class="font-display text-xl md:text-2xl font-semibold tracking-tight">Choose your week</h3>
-          <p class="mt-2 text-muted leading-relaxed max-w-xl">Pick a monthly cohort and reserve your spot. The next two run <span class="font-mono text-ink">Oct 05–11</span> and <span class="font-mono text-ink">Nov 02–08, 2026</span>.</p>
+          <p class="mt-2 text-muted leading-relaxed max-w-xl">Enrollment is rolling &mdash; pick <span class="font-mono text-ink">any upcoming Monday</span> to start your week and reserve your spot.</p>
         </div>
       </li>
 
@@ -751,32 +779,158 @@
   </div>
 </section>
 
-<!-- ============ TESTIMONIALS (placeholder, no invented quotes) ============ -->
-<section class="border-y hairline bg-panel/10">
+<!-- ============ SUCCESS STORIES ============ -->
+<section id="success" class="border-y hairline bg-panel/10">
   <div class="mx-auto max-w-site px-6 py-24 md:py-32">
-    <div class="max-w-2xl mb-10">
-      <p class="eyebrow text-accent reveal">From participants</p>
+    <div class="max-w-2xl mb-12">
+      <p class="eyebrow text-accent reveal">Success stories &middot; 100 hours cleared</p>
       <h2 class="reveal mt-4 font-display font-semibold text-[clamp(1.9rem,3.4vw,2.8rem)] leading-[1.08] tracking-[-0.02em]">
-        What builders say after their week.
+        <span class="font-serif italic font-normal text-accent">Congratulations</span> to our graduates.
       </h2>
+      <p class="reveal mt-5 text-muted leading-relaxed max-w-xl">
+        They called their shot, logged every hour, and cleared it &mdash; shipping real work in a single
+        week. Quoted with permission.
+      </p>
     </div>
 
-    <figure class="reveal max-w-3xl rounded-2xl border hairline bg-panel/60 p-7 md:p-9">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" class="text-accent/70 mb-5" aria-hidden="true"><path d="M9.5 6C6.5 7.5 5 10 5 13v5h5v-6H7.8c.2-1.8 1-3 2.7-3.8L9.5 6zm9 0c-3 1.5-4.5 4-4.5 7v5h5v-6h-2.2c.2-1.8 1-3 2.7-3.8L18.5 6z"/></svg>
-      <blockquote class="text-lg md:text-xl leading-relaxed text-ink">
-        I used the 100-Hour Workweek for two purposes. Firstly, for a focused push on work that usually gets fragmented, and secondly, to train my ability to carry out deep work for long periods of time. During the week, I made faster progress than ever before training ML models to predict oncology trajectories. On the weekend, I switched focus to actually complete an essay that I'd been chipping away at for months. It proved to me the bottleneck was attention more than anything else.
-      </blockquote>
-      <figcaption class="mt-7 flex items-center gap-3.5">
-        <span class="relative w-12 h-12 rounded-full overflow-hidden bg-white/[0.06] shrink-0" aria-hidden="true">
-          <span class="absolute inset-0 grid place-items-center font-display text-sm font-semibold text-muted">WS</span>
-          <img src="wian-stipp.jpg" alt="" width="96" height="96" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'" />
+    <div class="grid lg:grid-cols-2 gap-5 items-start">
+
+      <!-- Wian Stipp -->
+      <article class="reveal rounded-2xl border hairline bg-panel/60 p-6 md:p-7 flex flex-col">
+        <div class="flex items-center gap-4">
+          <span class="relative w-16 h-16 rounded-full overflow-hidden bg-white/[0.06] shrink-0">
+            <span class="absolute inset-0 grid place-items-center font-display text-base font-semibold text-muted" aria-hidden="true">WS</span>
+            <img src="wian-stipp.jpg" alt="Wian Stipp" width="128" height="128" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'" />
+          </span>
+          <div>
+            <div class="font-display text-lg font-semibold text-ink">Wian Stipp</div>
+            <div class="font-mono text-[0.72rem] text-faint">ML researcher</div>
+            <span class="mt-2 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[0.6rem]" style="border-color:rgba(80,196,138,.4);background:rgba(80,196,138,.12);color:#6fd3a1;">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              Cleared
+            </span>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <div class="eyebrow text-faint mb-2">What he shipped</div>
+          <p class="text-ink leading-relaxed">
+            Faster-than-ever progress training ML models to predict oncology trajectories &mdash; and a
+            long-overdue essay, finally finished.
+          </p>
+        </div>
+
+        <blockquote class="mt-5 text-muted leading-relaxed border-l-2 border-accent/40 pl-4">
+          &ldquo;I used the 100-Hour Workweek for two purposes. Firstly, for a focused push on work that
+          usually gets fragmented, and secondly, to train my ability to carry out deep work for long
+          periods of time. During the week, I made faster progress than ever before training ML models
+          to predict oncology trajectories. On the weekend, I switched focus to actually complete an
+          essay that I&rsquo;d been chipping away at for months. It proved to me the bottleneck was
+          attention more than anything else.&rdquo;
+        </blockquote>
+
+        <div class="mt-6 pt-5 border-t hairline">
+          <div class="eyebrow text-faint mb-3">Supporting materials</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="rounded-md border border-dashed hairline px-3 py-1.5 font-mono text-[0.68rem] text-faint">Livestream</span>
+            <span class="rounded-md border border-dashed hairline px-3 py-1.5 font-mono text-[0.68rem] text-faint">Artifacts</span>
+            <span class="rounded-md border border-dashed hairline px-3 py-1.5 font-mono text-[0.68rem] text-faint">RescueTime</span>
+          </div>
+          <!-- TODO: replace the dashed chips above with real anchor links to Wian's proof once provided. -->
+        </div>
+      </article>
+
+      <!-- Qian Jiang -->
+      <article class="reveal rounded-2xl border hairline bg-panel/60 p-6 md:p-7 flex flex-col">
+        <div class="flex items-center gap-4">
+          <span class="relative w-16 h-16 rounded-full overflow-hidden bg-white/[0.06] shrink-0">
+            <span class="absolute inset-0 grid place-items-center font-display text-base font-semibold text-muted" aria-hidden="true">QJ</span>
+            <img src="qian-jiang.jpg" alt="Qian Jiang" width="128" height="128" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'" />
+          </span>
+          <div>
+            <div class="font-display text-lg font-semibold text-ink">Qian Jiang</div>
+            <div class="font-mono text-[0.72rem] text-faint">Founder</div>
+            <span class="mt-2 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[0.6rem]" style="border-color:rgba(80,196,138,.4);background:rgba(80,196,138,.12);color:#6fd3a1;">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              Cleared &middot; 100 / 100 hrs
+            </span>
+            <div class="mt-1.5 font-mono text-[0.6rem] text-faint">Sept 28 &ndash; Oct 4, 2026</div>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <div class="eyebrow text-faint mb-2">What they shipped</div>
+          <p class="text-ink leading-relaxed">
+            Shipped their product and landed their first paying customers.
+          </p>
+        </div>
+
+        <blockquote class="mt-5 text-muted leading-relaxed border-l-2 border-accent/40 pl-4">
+          &ldquo;Super helpful to get the accountability and support from the 100-Hour Workweek team! I
+          joined the challenge because I wanted some immersive time to fully focus on my own product, make
+          breakthroughs on things I was unsure about, and build momentum. And it worked. I kept that
+          momentum going, shipped my product, and got paying customers 🚀 The team provides great
+          guidance &mdash; from setting up tools and tracking progress to keeping you encouraged
+          throughout the journey. You&rsquo;re not alone.&rdquo;
+        </blockquote>
+      </article>
+    </div>
+
+    <!-- More graduates (results) -->
+    <div class="mt-5 grid grid-cols-2 md:grid-cols-3 gap-4">
+      <!-- Lada Nuzhna -->
+      <article class="reveal rounded-2xl border hairline bg-panel/60 p-5 flex flex-col items-start">
+        <span class="relative w-12 h-12 rounded-full overflow-hidden bg-white/[0.06] shrink-0 mb-4">
+          <span class="absolute inset-0 grid place-items-center font-display text-sm font-semibold text-muted" aria-hidden="true">LN</span>
+          <img src="lada-nuzhna.jpg" alt="Lada Nuzhna" width="96" height="96" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'" />
         </span>
-        <span>
-          <span class="block font-display font-semibold text-ink">Wian Stipp</span>
-          <span class="block font-mono text-[0.72rem] text-faint">100-Hour Workweek graduate · ML researcher</span>
+        <div class="font-display font-semibold text-ink">Lada Nuzhna</div>
+        <div class="mt-1 font-mono text-[0.68rem] text-faint">100-Hour Workweek graduate</div>
+        <div class="mt-3 flex items-baseline gap-1.5">
+          <span class="font-display text-2xl font-semibold text-accent leading-none">100.1</span>
+          <span class="font-mono text-[0.66rem] text-faint">hrs logged</span>
+        </div>
+        <div class="mt-2.5 inline-flex items-center gap-1 font-mono text-[0.6rem]" style="color:#6fd3a1;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Cleared</div>
+      </article>
+      <!-- Jeremy Nixon -->
+      <article class="reveal rounded-2xl border hairline bg-panel/60 p-5 flex flex-col items-start">
+        <span class="relative w-12 h-12 rounded-full overflow-hidden bg-white/[0.06] shrink-0 mb-4">
+          <span class="absolute inset-0 grid place-items-center font-display text-sm font-semibold text-muted" aria-hidden="true">JN</span>
+          <img src="jeremy-nixon.jpg" alt="Jeremy Nixon" width="96" height="96" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'" />
         </span>
-      </figcaption>
-    </figure>
+        <div class="font-display font-semibold text-ink">Jeremy Nixon</div>
+        <div class="mt-1 font-mono text-[0.68rem] text-faint">100-Hour Workweek graduate</div>
+        <div class="mt-3 flex items-baseline gap-1.5">
+          <span class="font-display text-2xl font-semibold text-accent leading-none">100.5</span>
+          <span class="font-mono text-[0.66rem] text-faint">hrs logged</span>
+        </div>
+        <div class="mt-2.5 inline-flex items-center gap-1 font-mono text-[0.6rem]" style="color:#6fd3a1;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Cleared</div>
+      </article>
+      <!-- Ethan Perez -->
+      <article class="reveal rounded-2xl border hairline bg-panel/60 p-5 flex flex-col items-start">
+        <span class="relative w-12 h-12 rounded-full overflow-hidden bg-white/[0.06] shrink-0 mb-4">
+          <span class="absolute inset-0 grid place-items-center font-display text-sm font-semibold text-muted" aria-hidden="true">EP</span>
+          <img src="ethan-perez.jpg" alt="Ethan Perez" width="96" height="96" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'" />
+        </span>
+        <div class="font-display font-semibold text-ink">Ethan Perez</div>
+        <div class="mt-1 font-mono text-[0.68rem] text-faint">100-Hour Workweek graduate</div>
+        <div class="mt-3 flex items-baseline gap-1.5">
+          <span class="font-display text-2xl font-semibold text-accent leading-none">96.75</span>
+          <span class="font-mono text-[0.66rem] text-faint">hrs logged</span>
+        </div>
+        <div class="mt-2.5 inline-flex items-center gap-1 font-mono text-[0.6rem]" style="color:#6fd3a1;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Cleared</div>
+      </article>
+    </div>
+
+    <!-- Congratulatory sign-off (echoes the graduation poster) -->
+    <p class="reveal mt-12 text-center font-serif italic text-xl md:text-2xl text-ink/90">
+      &ldquo;Keep doing what matters, do it well, and make it count.&rdquo;
+    </p>
+
+    <!-- Editorial note for the team -->
+    <div class="reveal mt-8 rounded-lg border border-dashed border-accent/40 bg-accent/[0.04] px-4 py-3 font-mono text-[0.78rem] text-accent">
+      // TODO: Add Ethan Perez&rsquo;s photo (ethan-perez.jpg) and, where available, each graduate&rsquo;s project + supporting materials. Photos auto-appear once uploaded.
+    </div>
   </div>
 </section>
 
@@ -852,6 +1006,40 @@
   </div>
 </section>
 
+<!-- ============ STILL HAVE QUESTIONS ============ -->
+<section class="mx-auto max-w-site px-6 pb-24 md:pb-32">
+  <div class="reveal rounded-2xl border hairline bg-panel/40 p-8 md:p-12 text-center">
+    <p class="eyebrow text-accent">Still curious</p>
+    <h3 class="mt-3 font-display text-2xl md:text-3xl font-semibold tracking-tight">Have a question we didn&rsquo;t answer?</h3>
+    <p class="mt-4 text-muted leading-relaxed max-w-md mx-auto">
+      Drop your email and your question &mdash; it goes straight to our team and we&rsquo;ll get back to you.
+    </p>
+
+    <form id="ask-form" class="mt-8 max-w-md mx-auto text-left">
+      <!-- FormSubmit options -->
+      <input type="hidden" name="_subject" value="New question — 100-Hour Workweek site" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none" />
+
+      <label class="block">
+        <span class="eyebrow text-faint">Your email</span>
+        <input name="email" type="email" required placeholder="you@email.com"
+          class="mt-2 w-full rounded-lg border hairline bg-panel2 px-4 py-3 text-ink placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent/50" />
+      </label>
+      <label class="block mt-4">
+        <span class="eyebrow text-faint">Your question</span>
+        <textarea name="message" required rows="4" placeholder="Ask us anything&hellip;"
+          class="mt-2 w-full rounded-lg border hairline bg-panel2 px-4 py-3 text-ink placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent/50 resize-y"></textarea>
+      </label>
+
+      <button type="submit" class="btn btn-primary mt-5 w-full justify-center">Send question
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <p id="ask-status" class="mt-3 text-sm font-mono text-faint" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
 <!-- ============ FINAL CTA ============ -->
 <section class="relative overflow-hidden border-t hairline">
   <div class="absolute inset-0 glow pointer-events-none" aria-hidden="true"></div>
@@ -859,13 +1047,13 @@
     <h2 class="reveal font-display font-semibold text-[clamp(2.1rem,5vw,4rem)] leading-[1.04] tracking-[-0.025em] max-w-3xl mx-auto">
       Ready to have the most<br class="hidden sm:block" /> <span class="font-serif italic font-normal text-accent">productive</span> week of your life?
     </h2>
-    <p class="reveal mt-6 text-muted text-lg">The next cohort starts October 5. Call your shot.</p>
+    <p class="reveal mt-6 text-muted text-lg">Start any Monday that works for you. Call your shot.</p>
     <div class="reveal mt-9 flex flex-wrap justify-center gap-3">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdsBmmD85bvWYn0EA1jmhW_C-CyKDhm_NIYRF1D-m_7yCF7yQ/viewform?usp=header" target="_blank" rel="noopener noreferrer" class="btn btn-primary text-base">Join the next cohort
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdsBmmD85bvWYn0EA1jmhW_C-CyKDhm_NIYRF1D-m_7yCF7yQ/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="btn btn-primary text-base">Start Your 100-Hour Workweek
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
-    <p class="reveal mt-7 font-mono text-[0.78rem] text-faint tracking-tight">Oct 05–11 &nbsp;·&nbsp; Nov 02–08, 2026 &nbsp;·&nbsp; Monthly after that</p>
+    <p class="reveal mt-7 font-mono text-[0.78rem] text-faint tracking-tight">Start any Monday &nbsp;·&nbsp; A 7-day sprint &nbsp;·&nbsp; $100–200 for the week</p>
   </div>
 </section>
 
@@ -883,10 +1071,40 @@
         <a href="#idea" class="hover:text-ink transition-colors">The idea</a>
         <a href="#how" class="hover:text-ink transition-colors">How it works</a>
         <a href="#proof" class="hover:text-ink transition-colors">Proof</a>
+        <a href="#success" class="hover:text-ink transition-colors">Success Stories</a>
         <a href="#faq" class="hover:text-ink transition-colors">FAQ</a>
         <a href="https://jeremynixon.net/100-hr-workweek" target="_blank" rel="noopener" class="hover:text-ink transition-colors">Original post</a>
       </nav>
     </div>
+
+    <!-- Share -->
+    <div class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3">
+      <span class="eyebrow text-faint">Share this</span>
+      <div class="flex items-center gap-2">
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2F100hourworkweek.com" target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook" title="Share on Facebook"
+           class="inline-flex h-10 w-10 items-center justify-center rounded-full border hairline text-muted hover:text-ink hover:border-accent/60 transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7h2.3l.4-2.8h-2.7V9.4c0-.8.3-1.4 1.5-1.4h1.3V5.5c-.2 0-1.1-.1-2.1-.1-2 0-3.5 1.2-3.5 3.5v1.9H10.1V14H12.7v7h.8z"/></svg>
+        </a>
+        <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2F100hourworkweek.com&text=The%20100-Hour%20Workweek%20%E2%80%94%20the%20most%20productive%20week%20of%20your%20life." target="_blank" rel="noopener noreferrer" aria-label="Share on X" title="Share on X"
+           class="inline-flex h-10 w-10 items-center justify-center rounded-full border hairline text-muted hover:text-ink hover:border-accent/60 transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 4h2.6l-5.7 6.5L21 20h-5.2l-4-5.3L7.1 20H4.5l6-6.9L4 4h5.3l3.6 4.8L17.5 4zm-.9 14.4h1.4L8.5 5.5H7L16.6 18.4z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2F100hourworkweek.com" target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn" title="Share on LinkedIn"
+           class="inline-flex h-10 w-10 items-center justify-center rounded-full border hairline text-muted hover:text-ink hover:border-accent/60 transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 8.5A1.5 1.5 0 1 0 6.5 5.5a1.5 1.5 0 0 0 0 3zM5 10h3v9H5v-9zm5 0h2.9v1.2h.04c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.7 2 3.7 4.7V19h-3v-4.3c0-1 0-2.3-1.4-2.3s-1.6 1.1-1.6 2.3V19h-3v-9z"/></svg>
+        </a>
+        <a href="mailto:?subject=The%20100-Hour%20Workweek&body=The%20most%20productive%20week%20of%20your%20life%20%E2%80%94%20pick%20a%20Monday%20and%20go%3A%20https%3A%2F%2F100hourworkweek.com" aria-label="Share by email" title="Share by email"
+           class="inline-flex h-10 w-10 items-center justify-center rounded-full border hairline text-muted hover:text-ink hover:border-accent/60 transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16c.6 0 1 .4 1 1v10c0 .6-.4 1-1 1H4c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1zm.8 2 7.2 4.5L19.2 8H4.8zM19 10.1l-7 4.4-7-4.4V16h14v-5.9z"/></svg>
+        </a>
+        <button type="button" id="share-copy" aria-label="Copy link" title="Copy link"
+           class="inline-flex h-10 w-10 items-center justify-center rounded-full border hairline text-muted hover:text-ink hover:border-accent/60 transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a4 4 0 0 0 5.66 0l2.83-2.83a4 4 0 0 0-5.66-5.66L11.5 6"/><path d="M14 11a4 4 0 0 0-5.66 0l-2.83 2.83a4 4 0 0 0 5.66 5.66L12.5 18"/></svg>
+        </button>
+      </div>
+      <span id="share-copied" class="text-xs font-mono text-[#6fd3a1] opacity-0 transition-opacity duration-300">Link copied</span>
+    </div>
+
     <div class="mt-8 pt-6 border-t hairline flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-faint font-mono">
       <span>A sprint, not a lifestyle.</span>
       <span>© <span id="year"></span> The 100-Hour Workweek</span>
@@ -926,6 +1144,97 @@
       menuBtn.setAttribute('aria-expanded', 'false');
     });
   });
+
+  /* Page-transition navigation: in-page shortcuts feel like loading a new page */
+  var pageTrans = document.getElementById('page-transition');
+  function navigateTo(hash) {
+    var target = document.querySelector(hash);
+    if (!target) return;
+    if (reduce || !pageTrans) {
+      target.scrollIntoView({ block: 'start' });
+      try { history.pushState(null, '', hash); } catch (e) {}
+      return;
+    }
+    pageTrans.classList.add('active');           // fade to a clean "loading" screen
+    window.setTimeout(function () {
+      target.scrollIntoView({ block: 'start' }); // instant jump while covered
+      try { history.pushState(null, '', hash); } catch (e) {}
+      window.setTimeout(function () { pageTrans.classList.remove('active'); }, 100); // reveal the "new page"
+    }, 300);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('a[href^="#"]'), function (a) {
+    a.addEventListener('click', function (e) {
+      var h = a.getAttribute('href');
+      if (!h || h === '#') return;
+      if (!document.querySelector(h)) return;
+      e.preventDefault();
+      if (menu && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+        menuBtn.setAttribute('aria-expanded', 'false');
+      }
+      navigateTo(h);
+    });
+  });
+
+  /* Ask-a-question form -> emails the team via FormSubmit (no backend needed) */
+  var askForm = document.getElementById('ask-form');
+  if (askForm) {
+    var ASK_ENDPOINT = 'https://formsubmit.co/ajax/operations@infinity.inc';
+    askForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var status = document.getElementById('ask-status');
+      var btn = askForm.querySelector('button[type="submit"]');
+      status.style.color = '';
+      status.textContent = 'Sending…';
+      if (btn) btn.disabled = true;
+      fetch(ASK_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(askForm)
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (j && (j.success === true || j.success === 'true')) {
+            askForm.reset();
+            status.style.color = '#6fd3a1';
+            status.textContent = 'Thanks — your question is on its way.';
+          } else {
+            status.style.color = '#ff9a9a';
+            status.textContent = (j && j.message) ? j.message : 'Something went wrong. Please try again.';
+          }
+          if (btn) btn.disabled = false;
+        })
+        .catch(function () {
+          status.style.color = '#ff9a9a';
+          status.textContent = 'Network error — please try again.';
+          if (btn) btn.disabled = false;
+        });
+    });
+  }
+
+  /* Copy-link share button */
+  var copyBtn = document.getElementById('share-copy');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function () {
+      var url = 'https://100hourworkweek.com';
+      var copied = document.getElementById('share-copied');
+      function flash() {
+        if (!copied) return;
+        copied.style.opacity = '1';
+        window.setTimeout(function () { copied.style.opacity = '0'; }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(flash, function () { fallback(); });
+      } else { fallback(); }
+      function fallback() {
+        var t = document.createElement('textarea');
+        t.value = url; t.style.position = 'fixed'; t.style.opacity = '0';
+        document.body.appendChild(t); t.focus(); t.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(t); flash();
+      }
+    });
+  }
 
   /* Scroll reveal */
   var revealEls = document.querySelectorAll('.reveal');
