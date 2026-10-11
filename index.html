@@ -1340,54 +1340,81 @@
     revealEls.forEach(function (el) { io.observe(el); });
   }
 
-  /* Signature: build the logged-week ledger */
-  var hours = [
-    { d: 'M', h: 15 }, { d: 'T', h: 14 }, { d: 'W', h: 14 },
-    { d: 'T', h: 13 }, { d: 'F', h: 12 }, { d: 'S', h: 14 }, { d: 'S', h: 18 }
-  ];
-  var MAX = 18; // tallest column
+  /* Signature: build the logged-week ledger (live, gently fluctuating, always sums to 100) */
+  var hours = [15, 14, 14, 13, 12, 14, 18];        // sums to 100
+  var DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  var DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  var MAX = 18, MINH = 10;                           // reasonable movement band
   var ledger = document.getElementById('ledger');
-  var cellQueue = [];
+  var cols = [];
 
-  hours.forEach(function (day, ci) {
+  hours.forEach(function (h, ci) {
     var col = document.createElement('div');
     col.className = 'ledger-col flex flex-col-reverse gap-[3px] items-stretch';
-    col.setAttribute('title', dayName(ci) + ' · ' + day.h + ' hrs');
-
+    var cells = [];
     for (var r = 0; r < MAX; r++) {
       var cell = document.createElement('span');
       cell.className = 'ledger-cell block h-[8px] sm:h-[9px]';
-      var willLight = r < day.h;
-      if (willLight) {
-        // top-of-column hours run "hotter"
-        var hot = r >= day.h - 3;
-        cellQueue.push({ el: cell, hot: hot, order: ci * 100 + r });
-      } else {
-        cell.style.opacity = '0.5';
-      }
+      cell.style.opacity = '0.5';
       col.appendChild(cell);
+      cells.push(cell);
     }
-
     var lbl = document.createElement('span');
     lbl.className = 'font-mono text-[10px] text-faint text-center mt-2 order-first';
-    lbl.textContent = day.d;
+    lbl.textContent = DAY_LABELS[ci];
     col.appendChild(lbl);
-
     ledger.appendChild(col);
+    cols.push({ cells: cells, count: 0, el: col });
   });
 
-  function dayName(i){ return ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][i]; }
+  function setTitle(ci) { cols[ci].el.setAttribute('title', DAY_NAMES[ci] + ' · ' + cols[ci].count + ' hrs'); }
+
+  function renderCol(ci, n) {
+    n = Math.max(0, Math.min(MAX, n));
+    cols[ci].count = n;
+    var cells = cols[ci].cells;
+    for (var r = 0; r < MAX; r++) {
+      var lit = r < n, hot = lit && r >= n - 3;
+      cells[r].classList.toggle('lit', lit);
+      cells[r].classList.toggle('hot', hot);
+      cells[r].style.opacity = lit ? '' : '0.5';
+    }
+    setTitle(ci);
+  }
+
+  var liveTimer = null;
+  function startLive() {
+    if (reduce || liveTimer) return;
+    liveTimer = window.setInterval(function () {
+      if (document.hidden) return;                  // pause when tab is in the background
+      var ups = [], downs = [];
+      cols.forEach(function (o, i) { if (o.count < MAX) ups.push(i); if (o.count > MINH) downs.push(i); });
+      if (!ups.length || !downs.length) return;
+      var up = ups[(Math.random() * ups.length) | 0];
+      var down = downs[(Math.random() * downs.length) | 0];
+      if (down === up) return;                       // skip tick; keeps the weekly total at 100
+      renderCol(up, cols[up].count + 1);
+      renderCol(down, cols[down].count - 1);
+    }, 1300);
+  }
 
   function lightAll(animate) {
-    cellQueue.sort(function (a, b) { return a.order - b.order; });
-    cellQueue.forEach(function (c, i) {
-      var apply = function () {
-        c.el.classList.add('lit');
-        if (c.hot) c.el.classList.add('hot');
-      };
-      if (animate) { setTimeout(apply, 260 + i * 12); }
-      else { apply(); }
+    var queue = [];
+    cols.forEach(function (o, ci) {
+      for (var r = 0; r < hours[ci]; r++) queue.push({ ci: ci, r: r, hot: r >= hours[ci] - 3 });
     });
+    queue.sort(function (a, b) { return (a.ci * 100 + a.r) - (b.ci * 100 + b.r); });
+    function lit(c) {
+      var cell = cols[c.ci].cells[c.r];
+      cell.classList.add('lit'); if (c.hot) cell.classList.add('hot'); cell.style.opacity = '';
+    }
+    cols.forEach(function (o, ci) { o.count = hours[ci]; setTitle(ci); });
+    if (animate) {
+      queue.forEach(function (c, i) { window.setTimeout(function () { lit(c); }, 260 + i * 12); });
+      window.setTimeout(startLive, 260 + queue.length * 12 + 700);
+    } else {
+      queue.forEach(lit);
+    }
   }
 
   if (reduce) {
@@ -1402,6 +1429,7 @@
     lio.observe(ledger);
   } else {
     lightAll(false);
+    startLive();
   }
 
   /* Cover carousel */
